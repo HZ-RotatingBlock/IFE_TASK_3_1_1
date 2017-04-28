@@ -1,5 +1,7 @@
 # IFE-任务一：表单（一）单个表单项的检验
 
+预览地址：https://hz-rotatingblock.github.io/IFE_TASK_3_1_1/
+
 ## 任务目的
 
 * 加强对JavaScript的掌握
