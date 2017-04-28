@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>任务一：表单（一）单个表单项的检验</title>
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<form class="form" name="form_frame" action="" method="post">
+			<div class="name_length">
+				名称<input type="text" name="name_length_input" class="name_length_input">
+				<span class="prompt name_length_prompt">必填，长度为4~16个字符</span>
+				<div class="name_length_submit btn">验证</div>
+			</div>
+			<div class="name_content">
+				名称<input type="text" name="name_content_input" class="name_content_input">
+				<span class="prompt name_content_prompt">必填，长度为4~16个字符</span>
+				<div class="name_content_submit btn">验证</div>
+			</div>
+			<div class="name_chinese">
+				名称<input type="text" name="name_chinese_input" class="name_chinese_input">
+				<span class="prompt name_chinese_prompt">必填，长度为4~16个字符</span>
+				<div class="name_chinese_submit btn">验证</div>
+			</div>
+		</form>
+
+
+		<script type="text/javascript">
+			window.onload = function(){
+				
+
+				//将伪数组转换为数组
+				var input = document.querySelectorAll("input");
+				var input_arr = new Array();
+				var btn = document.querySelectorAll(".btn");
+				var button_arr = new Array();
+				for(let i = 0;i < input.length;i++){
+					input_arr.push(input[i]);
+				}
+				for(let i = 0;i < btn.length;i++){
+					button_arr.push(btn[i]);
+				}
+
+				//使用forEach为每个input标签添加聚焦和失焦效果
+				input_arr.forEach(function(element,index,array) {
+					
+					//输入框聚焦效果
+					element.onfocus = function(ev){
+						var ev = ev || window.event;
+						var target = ev.target || ev.srcElement;
+						if(target.nodeName.toLowerCase() == "input"){
+							if(!target.hasClass("selected")){
+								target.parentNode.querySelector(".prompt").innerText = "必填，长度为4~16个字符";
+								target.parentNode.querySelector(".prompt").style.color = "#b5b5b5";
+								target.removeClass("right");
+								target.removeClass("warning");
+								target.addClass("selected");
+							}
+						}
+						
+					};
+
+				});
+
+				//使用forEach为每个检验按钮添加效果
+				button_arr.forEach(function(element,index,array) {
+					
+					element.onclick = function(ev){
+						var ev = ev || window.event;
+						var target = ev.target || ev.srcElement;
+						if(target.parentNode.querySelector("input").nodeName.toLowerCase() == "input"){
+							//失焦时若为空则显示提示信息并改变输入框样式
+							if(target.parentNode.querySelector("input").value == ""){
+								target.parentNode.querySelector(".prompt").innerText  = "名称不能为空！";
+								target.parentNode.querySelector(".prompt").style.color = "#e32f3b";
+								target.parentNode.querySelector("input").removeClass("selected");
+								target.parentNode.querySelector("input").addClass("warning");
+
+							}else if(target.parentNode.querySelector("input").value.gblen() >= 4&&target.parentNode.querySelector("input").value.gblen() <=16){
+								alert(target.parentNode.querySelector("input").value.gblen());
+								alert(target.parentNode.querySelector("input").value);
+								target.parentNode.querySelector(".prompt").innerText  = "名称格式正确";
+								target.parentNode.querySelector(".prompt").style.color = "#88cb74";
+								target.parentNode.querySelector("input").removeClass("selected");
+								target.parentNode.querySelector("input").removeClass("warning");
+								target.parentNode.querySelector("input").addClass("right");
+
+							}else{
+								var x = target.parentNode.querySelector("input").value;
+								alert(x.gblen);
+								alert(x);
+								target.parentNode.querySelector(".prompt").innerText  = "名称格式错误";
+								target.parentNode.querySelector(".prompt").style.color = "#e32f3b";
+								target.parentNode.querySelector("input").removeClass("selected");
+								target.parentNode.querySelector("input").removeClass("right");
+								target.parentNode.querySelector("input").addClass("warning");
+								
+							}
+
+						}
+						
+					};
+
+				});
+				
+				//js实现jq的hasClass函数方法
+				Object.prototype.hasClass = function(cName){
+					return this.className.match( new RegExp( "(\\s|^)" + cName + "(\\s|$)") );
+				}
+
+				//addClass函数
+				Object.prototype.addClass = function(newClassName){
+					if(!this.hasClass(newClassName)){
+						this.className += " " + newClassName;
+					}
+				}
+				//js实现jq的removeClass函数方法
+				Object.prototype.removeClass = function(cName){
+					if(this.hasClass(cName)){
+						this.className = this.className.replace(new RegExp("(\\s|^)" + cName + "(\\s|$)")," ");
+					}
+				}
+				//创造对象的原型对象的特定的函数用以计算字符串长度，英文占1个字符，中文汉字占2个字符
+				String.prototype.gblen = function() {    
+					let len = 0;    
+					for (let i=0; i<this.length; i++) {    
+						if (this.charCodeAt(i)>127 || this.charCodeAt(i)==94) {    
+							len += 2;    
+						} else {    
+							len ++;    
+						}    
+					}    
+					return len;    
+				} 
+			}
+			
+		</script>
+
+	</body>
+</html>
